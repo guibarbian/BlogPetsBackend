@@ -44,7 +44,8 @@ public class PostControllerTest {
                 null,
                 "Hey Guys",
                 "This is my first post!",
-                0
+                0,
+                true
         );
 
         Post savedPost = postRepository.save(post);
@@ -54,7 +55,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Hey Guys"))
                 .andExpect(jsonPath("$.content").value("This is my first post!"))
-                .andExpect(jsonPath("$.likes").value(0));
+                .andExpect(jsonPath("$.likes").value(0))
+                .andExpect(jsonPath("$.liked").value(true));
     }
 
     @Test
@@ -70,13 +72,15 @@ public class PostControllerTest {
                 null,
                 "First Post",
                 "Content of the first post",
-                0
+                0,
+                false
         );
         Post post2 = new Post(
                 null,
                 "Second Post",
                 "Content of the second post",
-                0
+                0,
+                true
         );
 
         postRepository.save(post1);
@@ -94,7 +98,8 @@ public class PostControllerTest {
         RequestPostDTO requestPostDTO = new RequestPostDTO(
                 "Hey Guys",
                 "This is my first post!",
-                12
+                12,
+                true
         );
 
         mockMvc.perform(post(baseUrl)
@@ -103,7 +108,8 @@ public class PostControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.title").value("Hey Guys"))
                 .andExpect(jsonPath("$.content").value("This is my first post!"))
-                .andExpect(jsonPath("$.likes").value(0));
+                .andExpect(jsonPath("$.likes").value(0))
+                .andExpect(jsonPath("$.liked").value(false));
     }
 
     @Test
@@ -112,7 +118,8 @@ public class PostControllerTest {
                 null,
                 "Hey Guys",
                 "This is my first post!",
-                0
+                0,
+                false
         );
 
         Post savedPost = postRepository.save(post);
@@ -120,7 +127,8 @@ public class PostControllerTest {
         RequestPostDTO requestPostDTO = new RequestPostDTO(
                 "Ok Computer",
                 "Do you guys like Radiohead?",
-                5
+                5,
+                true
         );
 
         mockMvc.perform(put(baseUrl + "/" + savedPost.getId())
@@ -129,7 +137,8 @@ public class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Ok Computer"))
                 .andExpect(jsonPath("$.content").value("Do you guys like Radiohead?"))
-                .andExpect(jsonPath("$.likes").value(5));
+                .andExpect(jsonPath("$.likes").value(5))
+                .andExpect(jsonPath("$.liked").value(true));
     }
 
     @Test
@@ -137,7 +146,8 @@ public class PostControllerTest {
         RequestPostDTO requestPostDTO = new RequestPostDTO(
                 "Ok Computer",
                 "Do you guys like Radiohead?",
-                5
+                5,
+                false
         );
 
         mockMvc.perform(put(baseUrl + "/999999")
@@ -153,7 +163,8 @@ public class PostControllerTest {
                 null,
                 "Hey Guys",
                 "This is my first post!",
-                0
+                0,
+                true
         );
 
         Post savedPost = postRepository.save(post);

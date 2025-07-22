@@ -15,6 +15,9 @@ public record RequestPostDTO(
 
         @NotNull
         @PositiveOrZero
-        Integer likes
+        Integer likes,
+
+        @NotNull
+        Boolean liked
 ) {
 }

@@ -26,4 +26,7 @@ public class Post {
 
     @Column(name = "post_likes", nullable = false)
     private int likes;
+
+    @Column(name = "post_liked", nullable = false)
+    private boolean liked;
 }

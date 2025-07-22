@@ -12,5 +12,6 @@ public interface PostMapper {
     @Mapping(target = "title", source = "title")
     @Mapping(target = "content", source = "content")
     @Mapping(target = "likes", source = "likes")
+    @Mapping(target = "liked", source = "liked")
     ResponsePostDTO postToDto(Post source);
 }

@@ -4,6 +4,7 @@ public record ResponsePostDTO(
         Long id,
         String title,
         String content,
-        Integer likes
+        Integer likes,
+        boolean liked
 ) {
 }

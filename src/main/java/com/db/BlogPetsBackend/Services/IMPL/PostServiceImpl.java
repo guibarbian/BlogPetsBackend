@@ -61,6 +61,7 @@ public class PostServiceImpl implements PostService {
                 .title(dto.title())
                 .content(dto.content())
                 .likes(0)
+                .liked(false)
                 .build();
     }
 
@@ -72,6 +73,7 @@ public class PostServiceImpl implements PostService {
                 .title(dto.title())
                 .content(dto.content())
                 .likes(dto.likes())
+                .liked(dto.liked())
                 .build();
     }
 }

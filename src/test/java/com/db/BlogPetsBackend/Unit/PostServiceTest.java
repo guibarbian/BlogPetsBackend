@@ -13,8 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.List;
@@ -34,15 +33,16 @@ public class PostServiceTest {
 
     Post validPost = new Post(
             null, "Hey Guys",
-            "This is my first post!", 0
+            "This is my first post!", 0, false
     );
     Post validPostId = new Post(
             1L, "Hey Guys",
-            "This is my first post!", 0
+            "This is my first post!", 0, false
     );
 
     ResponsePostDTO validPostIdDto= new ResponsePostDTO(
-            validPostId.getId(), validPostId.getTitle(), validPostId.getContent(), validPostId.getLikes()
+            validPostId.getId(), validPostId.getTitle(), validPostId.getContent(), validPostId.getLikes(),
+            validPostId.isLiked()
     );
 
     @Test
@@ -80,7 +80,7 @@ public class PostServiceTest {
     @Test
     public void testCreateValidPost(){
         RequestPostDTO requestPostDTO = new RequestPostDTO(
-                "Hey Guys", "This is my first post!", 0
+                "Hey Guys", "This is my first post!", 12, true
         );
 
         when(postRepository.save(validPost)).thenReturn(validPostId);
@@ -88,29 +88,32 @@ public class PostServiceTest {
 
         ResponsePostDTO response = postService.createPost(requestPostDTO);
 
-        assertEquals(validPostIdDto, response);
+        assertEquals("Hey Guys", response.title());
+        assertEquals("This is my first post!", response.content());
+        assertEquals(0, response.likes());
+        assertFalse(response.liked());
         verify(postRepository, times(1)).save(validPost);
     }
 
     @Test
     public void testUpdatePost(){
         RequestPostDTO requestPostDTO = new RequestPostDTO(
-                "Hey Guys", "This is my second post!", 12
+                "Hey Guys", "This is my second post!", 12, true
         );
 
         Post updatedPostId = new Post(
                 1L, requestPostDTO.title(),
-                requestPostDTO.content(), requestPostDTO.likes()
+                requestPostDTO.content(), requestPostDTO.likes(), true
         );
 
         Post updatedPost = new Post(
                 1L, requestPostDTO.title(),
-                requestPostDTO.content(), requestPostDTO.likes()
+                requestPostDTO.content(), requestPostDTO.likes(), true
         );
 
         ResponsePostDTO responseDto = new ResponsePostDTO(
                 updatedPostId.getId(), updatedPost.getTitle(),
-                updatedPost.getContent(), updatedPost.getLikes()
+                updatedPost.getContent(), updatedPost.getLikes(), updatedPost.isLiked()
         );
 
         when(postRepository.findById(1L)).thenReturn(Optional.of(validPostId));
@@ -123,6 +126,7 @@ public class PostServiceTest {
         assertEquals("Hey Guys", responsePostDTO.title());
         assertEquals("This is my second post!", responsePostDTO.content());
         assertEquals(12, responsePostDTO.likes());
+        assertTrue(requestPostDTO.liked());
         verify(postRepository, times(1)).findById(1L);
         verify(postRepository, times(1)).save(updatedPost);
     }
